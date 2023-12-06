@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from .models import Kategori, Status, Produk
 from .serializers import KategoriSerializer, StatusSerializer, ProdukSerializer
 import requests
+import hashlib
 
 # Create your views here.
 
@@ -29,8 +30,9 @@ class CollectProductView(APIView):
     api_url = "https://recruitment.fastprint.co.id/tes/api_tes_programmer"
     api_username = request.data.get('username')
     api_password = request.data.get('password')
+    hashedPass = hashlib.md5(api_password.encode('utf-8')).hexdigest()
 
-    response = requests.post(api_url, data={'username': api_username, 'password': api_password})
+    response = requests.post(api_url, data={'username': api_username, 'password': hashedPass})
     
     if response.status_code != 200:
       return Response({'error': 'Failed to fetch data from the third-party API'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
