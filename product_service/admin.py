@@ -4,10 +4,7 @@ from .models import Produk, Kategori, Status
 # Register your models here.
 class ProdukAdmin(admin.ModelAdmin):
   list_display = ('id_produk', 'nama_produk', 'harga', 'formatted_kategori', 'formatted_status')
-
-  def get_queryset(self, request):
-    queryset = super().get_queryset(request)
-    return queryset.filter(status_id__id_status=1)
+  list_filter = ('status_id',)
 
   def formatted_kategori(self, obj):
     return obj.kategori_id.nama_kategori if obj.kategori_id else None
